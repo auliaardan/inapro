@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Medical Records
+{% endblock title %}
+
+{% block content %}
+    <div id="MainDiv">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom border-secondary">
+            <h1 id="medicalrecord-header" class="h2">Medical Records</h1>
+        </div>
+
+        <div class="table-responsive small">
+            <table id="myTable" class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th scope="col" data-orderable="true">#</th>
+                    <th scope="col" data-orderable="true">Name</th>
+                    <th scope="col" data-orderable="true">ID Number</th>
+                    <th scope="col" data-orderable="true">Last Treatment</th>
+                    <th scope="col" data-orderable="true">Hospital Name</th>
+                    <th scope="col" data-orderable="true">Diagnosis</th>
+                    <th scope="col" data-orderable="true">Treatment</th>
+                    <th scope="col" data-orderable="false">Detail</th>
+                </tr>
+                </thead>
+                <tbody id="table-body">
+                {% for patient_data in patient_last_treatments %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ patient_data.patient.name }}</td>
+                        <td>{{ patient_data.patient.id_number }}</td>
+                        {% if patient_data.last_treatment %}
+                            <td>{{ patient_data.last_treatment.date_of_treatment }}</td>
+                            <td>{{ patient_data.last_treatment.hospital_name }}</td>
+                            <td>{{ patient_data.last_treatment.diagnosis }}</td>
+                            <td>{{ patient_data.last_treatment.treatment }}</td>
+                        {% else %}
+                            <td>No Data</td>
+                            <td>No Data</td>
+                            <td>No Data</td>
+                            <td>No Data</td>
+                        {% endif %}
+                        <td><a href="{% url 'patient_detail' patient_data.patient.pk %}">View</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
+{% endblock content %}

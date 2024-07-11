@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load myfilters %}
+{% block head %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <style>
+        .flex-container {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .flex-container > div {
+            width: 50%;
+        }
+
+        .area-control {
+            width: 100%;
+            max-width: 100%;
+            height: 50px;
+            max-height: 300px;
+            padding: 8px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+    </style>
+{% endblock head %}
+
+{% block title %}
+    {% if form.instance.pk %}Edit{% else %}Create{% endif %} Treatment Record
+{% endblock title %}
+
+{% block content %}
+    <div class="container mt-3 mb-5">
+        <div class="">
+            <h2 class="mb-4" style="border-bottom: 1px solid black; padding-bottom: 0.5em">{% if form.instance.pk %}
+                Edit{% else %}Create{% endif %} Treatment Record</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="flex-container mb-1">
+                    <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
+                        <label for="patient">Patient</label>
+                        {{ form.patient|addclass:"form-control" }}
+                    </div>
+                    <div class="flex-fill d-flex flex-column">
+                        <label for="medical_record">Medical Record Number</label>
+                        {{ form.medical_record|addclass:"form-control" }}
+                    </div>
+                </div>
+                <div class="flex-container mb-1">
+                    <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
+                        <label for="id_date_of_treatment">Date of Treatment</label>
+                        {{ form.date_of_treatment }}
+                    </div>
+                    <div class="flex-fill d-flex flex-column">
+                        <label for="hospital_name">Hospital Name</label>
+                        {{ form.hospital_name|addclass:"form-control" }}
+                    </div>
+                </div>
+                <div class="flex-container mb-1">
+                    <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
+                        <label for="service_unit">Service Unit</label>
+                        {{ form.service_unit|addclass:"form-control" }}
+                    </div>
+                    <div class="flex-fill d-flex flex-column">
+                        <label for="doctor_name">Doctor Name</label>
+                        {{ form.doctor_name|addclass:"form-control" }}
+                    </div>
+                </div>
+
+                <h1 class="h4 mb-2 mt-3"><strong>Diagnosis Akhir</strong></h1>
+
+                <div class="flex-container mb-1">
+                    <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
+                        <label for="diagnosis">Diagnosis</label>
+                        {{ form.diagnosis|addclass:"form-control" }}
+                    </div>
+                    <div class="flex-fill d-flex flex-column">
+                        <label for="stadium">Stadium</label>
+                        {{ form.stadium|addclass:"form-control" }}
+                    </div>
+                </div>
+                <div class="flex-container mb-1">
+                    <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
+                        <label for="grade">Grade</label>
+                        {{ form.grade|addclass:"form-control" }}
+                    </div>
+                    <div class="flex-fill d-flex flex-column">
+                        <label for="tumor">Tumor (T)</label>
+                        {{ form.tumor|addclass:"form-control" }}
+                    </div>
+                </div>
+                <div class="flex-container mb-1">
+                    <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
+                        <label for="nodes">Nodes (N)</label>
+                        {{ form.nodes|addclass:"form-control" }}
+                    </div>
+                    <div class="flex-fill d-flex flex-column">
+                        <label for="metastasis">Metastasis (M)</label>
+                        {{ form.metastasis|addclass:"form-control" }}
+                    </div>
+                </div>
+                <div class="flex-container mb-1">
+                    <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
+                        <label for="bone_scan">Bone Scan</label>
+                        {{ form.bone_scan|addclass:"form-control" }}
+                    </div>
+                    <div class="flex-fill d-flex flex-column">
+                        <label for="pet_scan">Pet Scan</label>
+                        {{ form.pet_scan|addclass:"form-control" }}
+                    </div>
+                </div>
+                <div class="flex-container mb-1">
+                    <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
+                        <label for="psma_pet_ct">PSMA PET/CT</label>
+                        {{ form.psma_pet_ct|addclass:"form-control" }}
+                    </div>
+                    <div class="flex-fill d-flex flex-column">
+                        <label for="choline_pet_ct">Choline PET/CT</label>
+                        {{ form.choline_pet_ct|addclass:"form-control" }}
+                    </div>
+                </div>
+                <div class="flex-container mb-1">
+                    <div class="flex-fill d-flex flex-column">
+                        <label for="fluoride_pet">Fluoride PET</label>
+                        {{ form.fluoride_pet|addclass:"form-control" }}
+                    </div>
+                </div>
+
+                <h1 class="h4 mb-2 mt-3"><strong>Tindakan/Terapi</strong></h1>
+                <div class="form-group mb-3">
+                    <label for="treatment">Treatment</label>
+                    {{ form.treatment|addclass:"area-control" }}
+                </div>
+
+                <h1 class="h4 mb-2 mt-3"><strong>Follow Up</strong></h1>
+
+                <div class="flex-container mb-1">
+                    <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
+                        <label for="incontinence">Incontinence</label>
+                        {{ form.incontinence }}
+                    </div>
+                    <div class="flex-fill d-flex flex-column">
+                        <label for="pad_usage">Pad Usage</label>
+                        {{ form.pad_usage|addclass:"form-control" }}
+                    </div>
+                </div>
+                <div class="flex-container mb-1">
+                    <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
+                        <label for="erectile_dysfunction">Erectile Dysfunction</label>
+                        {{ form.erectile_dysfunction }}
+                    </div>
+                    <div class="flex-fill d-flex flex-column">
+                        <label for="side_effects">Side Effects</label>
+                        {{ form.side_effects|addclass:"area-control" }}
+                    </div>
+                </div>
+                <h1 class="h4 mb-2 mt-3"><strong>Catatan Perkembangan Pasien Terintegrasi</strong></h1>
+
+
+                <div class="flex-container mb-1">
+                    <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
+                        <label for="subjective">Subjective</label>
+                        {{ form.subjective|addclass:"area-control" }}
+                    </div>
+                    <div class="flex-fill d-flex flex-column">
+                        <label for="objective">Objective</label>
+                        {{ form.objective|addclass:"area-control" }}
+                    </div>
+                </div>
+                <div class="flex-container mb-1">
+                    <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
+                        <label for="assessment">Assessment</label>
+                        {{ form.assessment|addclass:"area-control" }}
+                    </div>
+                    <div class="flex-fill d-flex flex-column">
+                        <label for="plan">Plan</label>
+                        {{ form.plan|addclass:"area-control" }}
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1em">
+                    <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Update{% else %}
+                        Create{% endif %} Treatment Record
+                    </button>
+                    <a href="{% url 'patient_detail' form.instance.patient.id %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            flatpickr("id_date_of_treatment", {
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "F j, Y"
+            });
+        });
+    </script>
+
+{% endblock content %}

@@ -1,0 +1,58 @@
+.patient-container {
+    margin: 1em 20px 1em 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: #b0cede;
+}
+
+.mr-1 {
+    margin-right: 1em;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.left {
+    width: 30%;
+    background-color: #f0f0f0;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.right {
+    width: 70%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#datesList {
+    list-style: none;
+    padding: 0;
+}
+
+#datesList li {
+    padding: 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+#datesList li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 1px;
+    height: 10px;
+    background-color: #000;
+}
+
+#datesList li:hover {
+    background-color: #ddd;
+}
+
+#treatmentDetails {
+    font-size: 16px;
+}

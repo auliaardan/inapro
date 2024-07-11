@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div id="MainDiv">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom border-secondary">
+            <h1 id="patient-header" class="h2">Patient Database</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                    <button id="createpatientbutton" type="button" class="btn btn-sm btn-outline-secondary"
+                            onclick="window.location.href='{% url 'patient_create' %}'">
+                        Create Patient
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive small">
+            <table id="myTable" class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th scope="col" data-orderable="true">#</th>
+                    <th scope="col" data-orderable="true">ID Number</th>
+                    <th scope="col" data-orderable="true">Name</th>
+                    <th scope="col" data-orderable="true">Date of Birth</th>
+                    <th scope="col" data-orderable="true">Chief Complaint</th>
+                    <th scope="col" data-orderable="false"> </th>
+                </tr>
+                </thead>
+                <tbody id="table-body">
+                {% for patient in patient_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ patient.id_number }}</td>
+                        <td>{{ patient.name }}</td>
+                        <td>{{ patient.date_of_birth }}</td>
+                        <td>{{ patient.chief_complaint }}</td>
+                        <td><a href="{% url 'patient_edit' patient.id %}">Edit</a> / <a
+                                href="{% url 'patient_delete' patient.id %}">Delete</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
+{% endblock content %}

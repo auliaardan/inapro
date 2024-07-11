@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/patientdetail.css' %}">
+{% endblock head %}
+{% block title %}
+    {{ patient.name }}'s Medical Record
+{% endblock title %}
+
+
+{% block content %}
+    <div class="d-flex flex-column patient-container">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2"><strong>{{ patient.name }}</strong></h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                    <button id="createMedicalRecordButton" type="button" class="btn btn-sm btn-outline-primary"
+                            onclick="window.location.href='{% url 'treatmentrecord_create' patient.id %}'">
+                        Create New Record
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-row mt-1">
+            <p class="mr-1"><strong>NIK/NRM:</strong> {{ patient.id_number }}</p>
+            <p><strong>Tanggal Lahir:</strong> {{ patient.date_of_birth }}</p>
+        </div>
+        <div class="d-flex flex-row">
+            <p class="mr-1"><strong>No Hp:</strong> {{ patient.phone_number }}</p>
+            <p><strong>Health Insurance:</strong> {{ patient.health_insurance }}</p>
+        </div>
+        <p><strong>Address:</strong> {{ patient.address }}</p>
+        <p><strong>Chief complaint:</strong> {{ patient.chief_complaint }}</p>
+    </div>
+    <div class="container">
+        <div class="left">
+            <ul id="datesList">
+                {% for record in date_of_treatments %}
+                    <li data-id="{{ record.id }}">{{ record.date_of_treatment }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="right">
+            <div id="treatmentDetails">
+                {% if latest_record %}
+                    <div class="treatment-content">
+                        {% include 'medicalrecord/treatment_details.html' with record=latest_record %}
+                        <button onclick="window.location.href='{% url 'treatmentrecord_edit' latest_record.id %}'">
+                            Edit
+                        </button>
+                    </div>
+                {% else %}
+                    <p>Select a date to see treatment details</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#datesList li').click(function () {
+                var recordId = $(this).data('id');
+                $.ajax({
+                    url: "{% url 'get_treatment_record' %}",
+                    data: {
+                        'id': recordId
+                    },
+                    success: function (data) {
+                        $('#treatmentDetails').html(data.treatment_details);
+                        $('#treatmentDetails').append('<button onclick="window.location.href=\'{% url 'treatmentrecord_edit' %}'.replace('0', recordId) + '\'>Edit</button>');
+                    }, error: function (xhr) {
+                        if (xhr.status === 403) {
+                            alert("You are not authorized to view this record.");
+                        } else if (xhr.status === 404) {
+                            alert("Record not found.");
+                        } else {
+                            alert("An error occurred. Please try again.");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock content %}

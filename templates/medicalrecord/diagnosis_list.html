@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    Diagnosis Database
+{% endblock title %}
+
+{% block content %}
+<div id="MainDiv">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom border-secondary">
+        <h1 id="diagnosis-header" class="h2">Diagnosis Database</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+                <button id="creatediagnosisbutton" type="button" class="btn btn-sm btn-outline-secondary"
+                        onclick="window.location.href='{% url 'diagnosis_create' %}'">
+                    Create Diagnosis
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive small">
+        <table id="myTable" class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th scope="col" data-orderable="true">#</th>
+                <th scope="col" data-orderable="true">Name</th>
+                <th scope="col" data-orderable="true">ICD</th>
+                <th scope="col" data-orderable="false"></th>
+            </tr>
+            </thead>
+            <tbody id="table-body">
+            {% for diagnosis in diagnosis_list %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ diagnosis.name }}</td>
+                    <td>{{ diagnosis.icd_code }}</td>
+                    <td><a href="{% url 'diagnosis_edit' diagnosis.id %}">Edit</a> / <a href="{% url 'diagnosis_delete' diagnosis.id %}">Delete</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
+{% endblock content %}

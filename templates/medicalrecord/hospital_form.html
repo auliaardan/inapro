@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    {% if form.instance.pk %}Edit{% else %}Create{% endif %} Hospital
+{% endblock title %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <h2 class="mb-4">{% if form.instance.pk %}Edit{% else %}Create{% endif %} Hospital</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group mb-3">
+                        <label for="name">Hospital's Name</label>
+                        <input type="text" class="form-control" id="name" name="name"
+                               value="{% if form.name.value %}{{ form.name.value|stringformat:'s' }}{% endif %}"
+                               required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Update{% else %}
+                        Create{% endif %} Hospital
+                    </button>
+                    <a href="{% url 'hospital_list' %}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,87 @@
+<div class="treatment-content">
+    <div class="">
+        {% if record.date_of_treatment %}
+            <p><strong>Date of Treatment:</strong> {{ record.date_of_treatment }}</p>
+        {% endif %}
+        {% if record.medical_record %}
+            <p><strong>Medical Record Number:</strong> {{ record.medical_record }}</p>
+        {% endif %}
+    </div>
+    <div class="">
+        {% if record.hospital_name %}
+            <p><strong>Hospital Name:</strong> {{ record.hospital_name }}</p>
+        {% endif %}
+        {% if record.service_unit %}
+            <p><strong>Service Unit:</strong> {{ record.service_unit }}</p>
+        {% endif %}
+    </div>
+    {% if record.doctor_name %}
+        <p><strong>Doctor Name:</strong> {{ record.doctor_name }}</p>
+    {% endif %}
+
+
+    {% if record.diagnosis %}
+        <p><strong>Diagnosis:</strong> {{ record.diagnosis }}</p>
+    {% endif %}
+    {% if record.stadium %}
+        <p><strong>Stadium:</strong> {{ record.stadium }}</p>
+    {% endif %}
+    {% if record.grade %}
+        <p><strong>Grade:</strong> {{ record.grade }}</p>
+    {% endif %}
+    {% if record.tumor %}
+        <p><strong>Tumor (T):</strong> {{ record.tumor }}</p>
+    {% endif %}
+    {% if record.nodes %}
+        <p><strong>Nodes (N):</strong> {{ record.nodes }}</p>
+    {% endif %}
+    {% if record.metastasis %}
+        <p><strong>Metastasis (M):</strong> {{ record.metastasis }}</p>
+    {% endif %}
+    {% if record.bone_scan %}
+        <p><strong>Bone Scan:</strong> {{ record.bone_scan }}</p>
+    {% endif %}
+    {% if record.pet_scan %}
+        <p><strong>Pet Scan:</strong> {{ record.pet_scan }}</p>
+    {% endif %}
+    {% if record.psma_pet_ct %}
+        <p><strong>PSMA PET/CT:</strong> {{ record.psma_pet_ct }}</p>
+    {% endif %}
+    {% if record.choline_pet_ct %}
+        <p><strong>Choline PET/CT:</strong> {{ record.choline_pet_ct }}</p>
+    {% endif %}
+    {% if record.fluoride_pet %}
+        <p><strong>Fluoride PET:</strong> {{ record.fluoride_pet }}</p>
+    {% endif %}
+
+
+    {% if record.treatment %}
+        <p><strong>Treatment:</strong> {{ record.treatment }}</p>
+    {% endif %}
+    {% if record.incontinence %}
+        <p><strong>Incontinence:</strong> {% if record.incontinence%}Yes{% else %}No{% endif %}</p>
+    {% endif %}
+    {% if record.pad_usage %}
+        <p><strong>Pad Usage:</strong> {{ record.pad_usage }}</p>
+    {% endif %}
+    {% if record.erectile_dysfunction %}
+        <p><strong>Erectile Dysfunction:</strong> {% if record.erectile_dysfunction%}Yes{% else %}No{% endif %}</p>
+    {% endif %}
+    {% if record.side_effects %}
+        <p><strong>Side Effects:</strong> {{ record.side_effects }}</p>
+    {% endif %}
+
+
+    {% if record.subjective %}
+        <p><strong>Subjective:</strong> {{ record.subjective }}</p>
+    {% endif %}
+    {% if record.objective %}
+        <p><strong>Objective:</strong> {{ record.objective }}</p>
+    {% endif %}
+    {% if record.assessment %}
+        <p><strong>Assessment:</strong> {{ record.assessment }}</p>
+    {% endif %}
+    {% if record.plan %}
+        <p><strong>Plan:</strong> {{ record.plan }}</p>
+    {% endif %}
+</div>

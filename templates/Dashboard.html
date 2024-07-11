@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="d-flex justify-content-center align-items-stretch flex-wrap gap-3 text-center pt-3 pb-2 mb-3 border-bottom">
+        <!-- Total Patients -->
+        <div class="">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title">Total Patients</h4>
+                    <p class="card-text">{{ total_patients }}</p>
+                </div>
+            </div>
+        </div>
+        <!-- Total Doctors -->
+        <div class="">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title">Total Doctors</h4>
+                    <p class="card-text">{{ total_doctors }}</p>
+                </div>
+            </div>
+        </div>
+        <!-- Total Hospitals -->
+        <div class="">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title">Total Hospitals</h4>
+                    <p class="card-text">{{ total_hospitals }}</p>
+                </div>
+            </div>
+        </div>
+        <!-- Total Treatments -->
+        <div class="">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title">Total EMR</h4>
+                    <p class="card-text">{{ total_emr }}</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Canvas for the patient intake chart -->
+    <div class="row">
+        <div class="col-12">
+            <canvas id="patientIntakeChart" class="w-100" style="max-height: 400px;"></canvas>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function () {
+            var ctx = document.getElementById('patientIntakeChart').getContext('2d');
+            var patientIntakeChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Monthly Patient Intake',
+                        data: [],
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            var updateDashboard = function () {
+                $.ajax({
+                    url: '{% url "dashboard_update" %}',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#total_patients').text(data.total_patients);
+                        $('#total_hospital').text(data.total_hospital);
+                        $('#total_emr').text(data.total_emr);
+                        if (data.patient_intake_data) {
+                            updatePatientIntakeChart(JSON.parse(data.patient_intake_data));
+                        }
+                    }
+                });
+            };
+
+            setInterval(updateDashboard, 30000);
+
+            function updatePatientIntakeChart(newData) {
+                if (newData && newData.labels && newData.counts) {
+                    patientIntakeChart.data.labels = newData.labels;
+                    patientIntakeChart.data.datasets.forEach((dataset) => {
+                        dataset.data = newData.counts;
+                    });
+                    patientIntakeChart.update();
+                }
+            }
+
+            // Initial load
+            updateDashboard();
+        });
+
+    </script>
+{% endblock %}
