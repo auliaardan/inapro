@@ -29,7 +29,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=False)
 
-ALLOWED_HOSTS = ['localhost', "127.0.0.1"]
+ALLOWED_HOSTS = ['localhost', "127.0.0.1", "vela.jagoanhosting.com", "103.163.138.82", ]
 
 # Application definition
 INSTALLED_APPS = [
@@ -139,7 +139,7 @@ MEDIA_URL = '/media/'
 if env.bool("DEBUG"):
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 else:
-    MEDIA_ROOT = '/home/quizzerp/public_html/media'
+    MEDIA_ROOT = '/home/inapro/public_html/media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
