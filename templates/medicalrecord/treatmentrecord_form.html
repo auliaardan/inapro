@@ -40,7 +40,7 @@
                 <div class="flex-container mb-1">
                     <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
                         <label for="patient">Patient</label>
-                        {{ form.patient|addclass:"form-control"}}
+                        {{ form.patient|addclass:"form-control" }}
                     </div>
                     <div class="flex-fill d-flex flex-column">
                         <label for="medical_record">Medical Record Number</label>
@@ -182,7 +182,12 @@
                     <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Update{% else %}
                         Create{% endif %} Treatment Record
                     </button>
-                    <a href="{% url 'patient_detail' patient.id %}" class="btn btn-secondary">Cancel</a>
+                    {% if form.instance.pk %}
+                        <a href="{% url 'patient_detail' form.instance.patient.id %}" class="btn btn-secondary">Cancel</a>
+                    {% else %}
+                        <a href="{% url 'patient_detail' patient.id %}" class="btn btn-secondary">Cancel</a>
+                    {% endif %}
+
                 </div>
             </form>
         </div>
