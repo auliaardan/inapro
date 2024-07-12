@@ -237,6 +237,11 @@ class TreatmentRecordCreateView(LoginRequiredMixin, CreateView):
         form.instance.patient = get_object_or_404(patientdata, pk=self.kwargs.get('patient_id'))
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['patient'] = get_object_or_404(patientdata, pk=self.kwargs['patient_id'])
+        return context
+
 
 class TreatmentRecordUpdateView(LoginRequiredMixin, UpdateView):
     model = TreatmentRecord
@@ -245,6 +250,7 @@ class TreatmentRecordUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('patient_detail', kwargs={'pk': self.object.patient.pk})
+
 
 class TreatmentRecordDeleteView(LoginRequiredMixin, DeleteView):
     model = TreatmentRecord

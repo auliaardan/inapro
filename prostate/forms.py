@@ -22,6 +22,10 @@ class treatmentrecordForm(forms.ModelForm):
         model = TreatmentRecord
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super(treatmentrecordForm, self).__init__(*args, **kwargs)
+        self.fields['patient'].widget.attrs['readonly'] = True
+
 
 class DoctorForm(forms.ModelForm):
     class Meta:
@@ -30,8 +34,6 @@ class DoctorForm(forms.ModelForm):
 
 
 class DiagnosisForm(forms.ModelForm):
-
-
     class Meta:
         model = Diagnosis
         fields = '__all__'

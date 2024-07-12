@@ -40,7 +40,7 @@
                 <div class="flex-container mb-1">
                     <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
                         <label for="patient">Patient</label>
-                        {{ form.patient|addclass:"form-control" }}
+                        {{ form.patient|addclass:"form-control"}}
                     </div>
                     <div class="flex-fill d-flex flex-column">
                         <label for="medical_record">Medical Record Number</label>
@@ -182,7 +182,7 @@
                     <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Update{% else %}
                         Create{% endif %} Treatment Record
                     </button>
-                    <a href="{% url 'patient_detail' form.instance.patient.id %}" class="btn btn-secondary">Cancel</a>
+                    <a href="{% url 'patient_detail' patient.id %}" class="btn btn-secondary">Cancel</a>
                 </div>
             </form>
         </div>
@@ -190,12 +190,11 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            flatpickr("id_date_of_treatment", {
+            flatpickr("#id_date_of_treatment", {
                 dateFormat: "Y-m-d",
                 altInput: true,
                 altFormat: "F j, Y"
             });
         });
     </script>
-
-{% endblock content %}
+{% endblock %}

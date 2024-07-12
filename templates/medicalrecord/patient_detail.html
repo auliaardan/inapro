@@ -2,11 +2,10 @@
 {% load static %}
 {% block head %}
     <link rel="stylesheet" href="{% static 'css/patientdetail.css' %}">
-{% endblock head %}
+{% endblock %}
 {% block title %}
     {{ patient.name }}'s Medical Record
-{% endblock title %}
-
+{% endblock %}
 
 {% block content %}
     <div class="d-flex flex-column patient-container">
@@ -45,7 +44,7 @@
                 {% if latest_record %}
                     <div class="treatment-content">
                         {% include 'medicalrecord/treatment_details.html' with record=latest_record %}
-                        <button onclick="window.location.href='{% url 'treatmentrecord_edit' latest_record.id %}'">
+                        <button class="btn btn-sm btn-outline-primary" id="editButton" onclick="window.location.href='{% url 'treatmentrecord_edit' latest_record.id %}'">
                             Edit
                         </button>
                     </div>
@@ -66,8 +65,10 @@
                     },
                     success: function (data) {
                         $('#treatmentDetails').html(data.treatment_details);
-                        $('#treatmentDetails').append('<button onclick="window.location.href=\'{% url 'treatmentrecord_edit' %}'.replace('0', recordId) + '\'>Edit</button>');
-                    }, error: function (xhr) {
+                        var editButton = '<button class="btn btn-sm btn-outline-primary" onclick="window.location.href=\'{% url "treatmentrecord_edit" 0 %}\'.replace(0, ' + recordId + ')">Edit</button>';
+                        $('#treatmentDetails').append(editButton);
+                    },
+                    error: function (xhr) {
                         if (xhr.status === 403) {
                             alert("You are not authorized to view this record.");
                         } else if (xhr.status === 404) {
@@ -80,4 +81,4 @@
             });
         });
     </script>
-{% endblock content %}
+{% endblock %}
