@@ -14,7 +14,8 @@
                     <div class="form-group mb-3">
                         <label for="id_number">ID Number</label>
                         <input type="text" class="form-control" id="id_number" name="id_number"
-                               value="{% if form.id_number.value %}{{ form.id_number.value|stringformat:'s' }}{% endif %}"
+                               value="
+                                       {% if form.id_number.value %}{{ form.id_number.value|stringformat:'s' }}{% endif %}"
                                required>
                     </div>
                     <div class="form-group mb-3">
@@ -26,30 +27,29 @@
                     <div class="form-group mb-3">
                         <label for="phone_number">Phone Number</label>
                         <input type="text" class="form-control" id="phone_number" name="phone_number"
-                               value="{% if form.phone_number.value %}{{ form.phone_number.value|stringformat:'s' }}{% endif %}"
+                               value="
+                                       {% if form.phone_number.value %}{{ form.phone_number.value|stringformat:'s' }}{% endif %}"
                                required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="date_of_birth">Date of Birth</label>
                         <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
-                               value="{% if form.date_of_birth.value %}{{ form.date_of_birth.value|stringformat:'s' }}{% endif %}"
+                               value="
+                                       {% if form.date_of_birth.value %}{{ form.date_of_birth.value|stringformat:'s' }}{% endif %}"
                                required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="ethnic_group">Ethnic Group</label>
                         <input type="text" class="form-control" id="ethnic_group" name="ethnic_group"
-                               value="{% if form.ethnic_group.value %}{{ form.ethnic_group.value|stringformat:'s' }}{% endif %}"
+                               value="
+                                       {% if form.ethnic_group.value %}{{ form.ethnic_group.value|stringformat:'s' }}{% endif %}"
                                required>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="chief_complaint">Chief Complaint</label>
-                        <textarea class="form-control" id="chief_complaint" name="chief_complaint" rows="3"
-                                  required>{% if form.chief_complaint.value %}{{ form.chief_complaint.value|stringformat:'s' }}{% endif %}</textarea>
                     </div>
                     <div class="form-group mb-3">
                         <label for="health_insurance">Health Insurance</label>
                         <input type="text" class="form-control" id="health_insurance" name="health_insurance"
-                               value="{% if form.health_insurance.value %}{{ form.health_insurance.value|stringformat:'s' }}{% endif %}"
+                               value="
+                                       {% if form.health_insurance.value %}{{ form.health_insurance.value|stringformat:'s' }}{% endif %}"
                                required>
                     </div>
                     <div class="form-group mb-3">
