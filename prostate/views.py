@@ -303,6 +303,9 @@ def import_data(request):
                 # Read the Excel file using pandas
                 df = pd.read_excel(excel_file)
 
+                # Replace NaN values with empty strings
+                df = df.fillna('')
+
                 # Iterate through the rows and create TreatmentRecord objects
                 for index, row in df.iterrows():
                     try:
