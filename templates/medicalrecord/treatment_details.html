@@ -39,47 +39,57 @@
         <p><strong>Metastasis (M):</strong> {{ record.metastasis }}</p>
     {% endif %}
     {% if record.bone_scan %}
-        <p><strong>Bone Scan:</strong> {{ record.bone_scan }}</p>
+        <p><strong>Bone Scan:</strong> {{ record.bone_scan|linebreaksbr }}</p>
     {% endif %}
     {% if record.pet_scan %}
-        <p><strong>Pet Scan:</strong> {{ record.pet_scan }}</p>
+        <p><strong>Pet Scan:</strong> {{ record.pet_scan|linebreaksbr }}</p>
     {% endif %}
     {% if record.psma_pet_ct %}
-        <p><strong>PSMA PET/CT:</strong> {{ record.psma_pet_ct }}</p>
+        <p><strong>PSMA PET/CT:</strong> {{ record.psma_pet_ct|linebreaksbr }}</p>
     {% endif %}
     {% if record.choline_pet_ct %}
-        <p><strong>Choline PET/CT:</strong> {{ record.choline_pet_ct }}</p>
+        <p><strong>Choline PET/CT:</strong> {{ record.choline_pet_ct|linebreaksbr }}</p>
     {% endif %}
     {% if record.fluoride_pet %}
-        <p><strong>Fluoride PET:</strong> {{ record.fluoride_pet }}</p>
+        <p><strong>Fluoride PET:</strong> {{ record.fluoride_pet|linebreaksbr }}</p>
+    {% endif %}
+    {% if record.foto_lab %}
+        <p><strong>Foto Lab:</strong> <a href="{{ record.foto_lab.url }}" target="_blank">View Image</a></p>
+    {% endif %}
+    {% if record.foto_radiologi %}
+        <p><strong>Foto Radiologi:</strong> <a href="{{ record.foto_radiologi.url }}" target="_blank">View Image</a></p>
     {% endif %}
 
 
     {% if record.treatment %}
-        <p><strong>Treatment:</strong> {{ record.treatment }}</p>
+        <p><strong>Treatment:</strong> {{ record.treatment|linebreaksbr }}</p>
+    {% endif %}
+    {% if record.foto_laporan_operasi %}
+        <p><strong>Foto Laporan Operasi:</strong> <a href="{{ record.foto_laporan_operasi.url }}" target="_blank">View
+            Image</a></p>
     {% endif %}
     {% if record.incontinence %}
-        <p><strong>Incontinence:</strong> {% if record.incontinence%}Yes{% else %}No{% endif %}</p>
+        <p><strong>Incontinence:</strong> {% if record.incontinence %}Yes{% else %}No{% endif %}</p>
     {% endif %}
     {% if record.pad_usage %}
         <p><strong>Pad Usage:</strong> {{ record.pad_usage }}</p>
     {% endif %}
     {% if record.erectile_dysfunction %}
-        <p><strong>Erectile Dysfunction:</strong> {% if record.erectile_dysfunction%}Yes{% else %}No{% endif %}</p>
+        <p><strong>Erectile Dysfunction:</strong> {% if record.erectile_dysfunction %}Yes{% else %}No{% endif %}</p>
     {% endif %}
     {% if record.side_effects %}
-        <p><strong>Side Effects:</strong> {{ record.side_effects }}</p>
+        <p><strong>Side Effects:</strong> {{ record.side_effects|linebreaksbr }}</p>
     {% endif %}
 
 
     {% if record.subjective %}
-        <p><strong>Subjective:</strong> {{ record.subjective }}</p>
+        <p><strong>Subjective:</strong> {{ record.subjective|linebreaksbr }}</p>
     {% endif %}
     {% if record.objective %}
-        <p><strong>Objective:</strong> {{ record.objective }}</p>
+        <p><strong>Objective:</strong> {{ record.objective|linebreaksbr }}</p>
     {% endif %}
     {% if record.assessment %}
-        <p><strong>Assessment:</strong> {{ record.assessment }}</p>
+        <p><strong>Assessment:</strong> {{ record.assessment|linebreaksbr }}</p>
     {% endif %}
     {% if record.plan %}
         <p><strong>Plan:</strong> {{ record.plan }}</p>

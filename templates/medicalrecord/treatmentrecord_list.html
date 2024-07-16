@@ -17,11 +17,10 @@
                 <tr>
                     <th scope="col" data-orderable="true">#</th>
                     <th scope="col" data-orderable="true">Name</th>
-                    <th scope="col" data-orderable="true">ID Number</th>
-                    <th scope="col" data-orderable="true">Last Treatment</th>
-                    <th scope="col" data-orderable="true">Hospital Name</th>
                     <th scope="col" data-orderable="true">Diagnosis</th>
+                    <th scope="col" data-orderable="true">Staging</th>
                     <th scope="col" data-orderable="true">Treatment</th>
+                    <th scope="col" data-orderable="true">Hospital </th>
                     <th scope="col" data-orderable="false">Detail</th>
                 </tr>
                 </thead>
@@ -30,12 +29,11 @@
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ patient_data.patient.name }}</td>
-                        <td>{{ patient_data.patient.id_number }}</td>
                         {% if patient_data.last_treatment %}
-                            <td>{{ patient_data.last_treatment.date_of_treatment }}</td>
-                            <td>{{ patient_data.last_treatment.hospital_name }}</td>
                             <td>{{ patient_data.last_treatment.diagnosis }}</td>
+                            <td>{{ patient_data.last_treatment.stadium }}</td>
                             <td>{{ patient_data.last_treatment.treatment }}</td>
+                            <td>{{ patient_data.last_treatment.hospital }}</td>
                         {% else %}
                             <td>No Data</td>
                             <td>No Data</td>

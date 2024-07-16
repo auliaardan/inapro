@@ -35,7 +35,7 @@
         <div class="">
             <h2 class="mb-4" style="border-bottom: 1px solid black; padding-bottom: 0.5em">{% if form.instance.pk %}
                 Edit{% else %}Create{% endif %} Treatment Record</h2>
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="flex-container mb-1">
                     <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
@@ -103,34 +103,49 @@
                 <div class="flex-container mb-1">
                     <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
                         <label for="bone_scan">Bone Scan</label>
-                        {{ form.bone_scan|addclass:"form-control" }}
+                        {{ form.bone_scan|addclass:"area-control"  }}
                     </div>
                     <div class="flex-fill d-flex flex-column">
                         <label for="pet_scan">Pet Scan</label>
-                        {{ form.pet_scan|addclass:"form-control" }}
+                        {{ form.pet_scan|addclass:"area-control"  }}
                     </div>
                 </div>
                 <div class="flex-container mb-1">
                     <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
                         <label for="psma_pet_ct">PSMA PET/CT</label>
-                        {{ form.psma_pet_ct|addclass:"form-control" }}
+                        {{ form.psma_pet_ct|addclass:"area-control"  }}
                     </div>
                     <div class="flex-fill d-flex flex-column">
                         <label for="choline_pet_ct">Choline PET/CT</label>
-                        {{ form.choline_pet_ct|addclass:"form-control" }}
+                        {{ form.choline_pet_ct|addclass:"area-control"  }}
                     </div>
                 </div>
                 <div class="flex-container mb-1">
                     <div class="flex-fill d-flex flex-column">
                         <label for="fluoride_pet">Fluoride PET</label>
-                        {{ form.fluoride_pet|addclass:"form-control" }}
+                        {{ form.fluoride_pet|addclass:"area-control"  }}
                     </div>
                 </div>
-
+                <div class="flex-container mb-1">
+                    <div class="flex-fill d-flex flex-column" style="margin-right: 1em">
+                        <label for="psma_pet_ct">Upload Foto Lab</label>
+                        {{ form.foto_lab|addclass:"form-control" }}
+                    </div>
+                    <div class="flex-fill d-flex flex-column">
+                        <label for="choline_pet_ct">Upload Foto Radiologi</label>
+                        {{ form.foto_radiologi|addclass:"form-control" }}
+                    </div>
+                </div>
                 <h1 class="h4 mb-2 mt-3"><strong>Tindakan/Terapi</strong></h1>
                 <div class="form-group mb-3">
                     <label for="treatment">Treatment</label>
                     {{ form.treatment|addclass:"area-control" }}
+                </div>
+                <div class="flex-container mb-1">
+                    <div class="flex-fill d-flex flex-column">
+                        <label for="fluoride_pet">Upload Laporan Operasi</label>
+                        {{ form.foto_laporan_operasi|addclass:"form-control" }}
+                    </div>
                 </div>
 
                 <h1 class="h4 mb-2 mt-3"><strong>Follow Up</strong></h1>
@@ -183,7 +198,8 @@
                         Create{% endif %} Treatment Record
                     </button>
                     {% if form.instance.pk %}
-                        <a href="{% url 'patient_detail' form.instance.patient.id %}" class="btn btn-secondary">Cancel</a>
+                        <a href="{% url 'patient_detail' form.instance.patient.id %}"
+                           class="btn btn-secondary">Cancel</a>
                     {% else %}
                         <a href="{% url 'patient_detail' patient.id %}" class="btn btn-secondary">Cancel</a>
                     {% endif %}
