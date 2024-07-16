@@ -29,7 +29,6 @@
             <p><strong>Health Insurance:</strong> {{ patient.health_insurance }}</p>
         </div>
         <p><strong>Address:</strong> {{ patient.address }}</p>
-        <p><strong>Chief complaint:</strong> {{ patient.chief_complaint }}</p>
     </div>
     <div class="container">
         <div class="left">
@@ -44,8 +43,13 @@
                 {% if latest_record %}
                     <div class="treatment-content">
                         {% include 'medicalrecord/treatment_details.html' with record=latest_record %}
-                        <button class="btn btn-sm btn-outline-primary" id="editButton" onclick="window.location.href='{% url 'treatmentrecord_edit' latest_record.id %}'">
+                        <button class="btn btn-sm btn-outline-primary" id="editButton"
+                                onclick="window.location.href='{% url 'treatmentrecord_edit' latest_record.id %}'">
                             Edit
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" id="editButton"
+                                onclick="window.location.href='{% url 'treatmentrecord_delete' latest_record.id %}'">
+                            Delete
                         </button>
                     </div>
                 {% else %}
@@ -66,7 +70,9 @@
                     success: function (data) {
                         $('#treatmentDetails').html(data.treatment_details);
                         var editButton = '<button class="btn btn-sm btn-outline-primary" onclick="window.location.href=\'{% url "treatmentrecord_edit" 0 %}\'.replace(0, ' + recordId + ')">Edit</button>';
+                        var deleteButton = '<button class="btn btn-sm btn-outline-danger" onclick="window.location.href=\'{% url "treatmentrecord_delete" 0 %}\'.replace(0, ' + recordId + ')">Delete</button>';
                         $('#treatmentDetails').append(editButton);
+                        $('#treatmentDetails').append(deleteButton);
                     },
                     error: function (xhr) {
                         if (xhr.status === 403) {

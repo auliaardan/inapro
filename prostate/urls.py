@@ -6,11 +6,15 @@ from .views import publicView, dashboardView, DashboardUpdateView, PatientListVi
     PatientDeleteView, PatientUpdateView, DoctorListView, DoctorCreateView, DoctorUpdateView, DoctorDeleteView, \
     TreatmentRecordListView, TreatmentRecordCreateView, TreatmentRecordUpdateView, TreatmentRecordDeleteView, \
     PatientDetailView, HospitalCreateView, HospitalDeleteView, HospitalListView, HospitalUpdateView, \
-    DiagnosisListView, DiagnosisCreateView, DiagnosisDeleteView, DiagnosisUpdateView, get_treatment_record
+    DiagnosisListView, DiagnosisCreateView, DiagnosisDeleteView, DiagnosisUpdateView, get_treatment_record, import_data, \
+    export_data
 
 urlpatterns = [
+                  path('export/', export_data, name='export_data'),
+                  path('import/', import_data, name='import_data'),
                   path('treatmentrecords/', TreatmentRecordListView.as_view(), name='treatmentrecord_list'),
-                  path('treatmentrecords/new/<int:patient_id>/', TreatmentRecordCreateView.as_view(), name='treatmentrecord_create'),
+                  path('treatmentrecords/new/<int:patient_id>/', TreatmentRecordCreateView.as_view(),
+                       name='treatmentrecord_create'),
                   path('treatmentrecords/edit/<int:pk>/', TreatmentRecordUpdateView.as_view(),
                        name='treatmentrecord_edit'),
                   path('treatmentrecords/delete/<int:pk>/', TreatmentRecordDeleteView.as_view(),

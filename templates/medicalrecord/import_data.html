@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Import Treatment Records
+{% endblock title %}
+{% block content %}
+    <div class="container mt-3 mb-5">
+        <h2 class="mb-4" style="border-bottom: 1px solid black; padding-bottom: 0.5em">Import Data</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="mt-3" style="border-top: 1px solid black; margin-top: 1em">
+            <h4>Download Master Excel File</h4>
+            <p>Download Master Excel file to use as a template for importing data.</p>
+            <a href="{% static 'downloadables/sample_import_data.xlsx' %}" class="btn btn-secondary">Download Master Excel</a>
+        </div>
+    </div>
+
+{% endblock %}

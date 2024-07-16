@@ -43,3 +43,15 @@ class HospitalForm(forms.ModelForm):
     class Meta:
         model = Hospital
         fields = '__all__'
+
+
+class UploadFileForm(forms.Form):
+    file = forms.FileField()
+
+
+class ExportDataForm(forms.Form):
+    export_all = forms.BooleanField(required=False, initial=False, label="Export All Data")
+    hospital = forms.ModelChoiceField(queryset=Hospital.objects.all(), required=False, label="Hospital")
+    doctor = forms.ModelChoiceField(queryset=Doctor.objects.all(), required=False, label="Doctor")
+    diagnosis = forms.ModelChoiceField(queryset=Diagnosis.objects.all(), required=False, label="Diagnosis")
+    treatment = forms.CharField(required=False, label="Treatment")

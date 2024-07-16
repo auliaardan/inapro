@@ -1,20 +1,23 @@
 import json
 from datetime import timedelta
 
+import pandas as pd
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Count
 from django.db.models.functions import TruncMonth
-from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 from django.utils.timezone import now
 from django.views import View
 from django.views.generic import TemplateView, CreateView, ListView, UpdateView, DeleteView, DetailView
 
-from .forms import patientdataForm, DoctorForm, treatmentrecordForm, HospitalForm, DiagnosisForm
+from .forms import patientdataForm, DoctorForm, treatmentrecordForm, HospitalForm, DiagnosisForm, UploadFileForm, \
+    ExportDataForm
 from .models import patientdata, Hospital, TreatmentRecord, Doctor, Diagnosis
 
 
@@ -287,3 +290,195 @@ def get_treatment_record(request):
         'treatment_details': render_to_string('medicalrecord/treatment_details.html', {'record': record})
     }
     return JsonResponse(data)
+
+
+@login_required
+def import_data(request):
+    if request.method == "POST":
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            excel_file = request.FILES["file"]
+
+            try:
+                # Read the Excel file using pandas
+                df = pd.read_excel(excel_file)
+
+                # Iterate through the rows and create TreatmentRecord objects
+                for index, row in df.iterrows():
+                    try:
+                        # Skip empty rows
+                        if row.isnull().all():
+                            continue
+
+                        # Handle patient data
+                        patient_id_number = row.get('patient_id_number')
+                        patient_name = row.get('patient_name')
+                        patient_phone_number = row.get('patient_phone_number')
+                        patient_date_of_birth = row.get('patient_date_of_birth')
+                        patient_ethnic_group = row.get('patient_ethnic_group')
+                        patient_health_insurance = row.get('patient_health_insurance')
+                        patient_address = row.get('patient_address')
+
+                        if patient_id_number:
+                            patient, created = patientdata.objects.get_or_create(
+                                id_number=patient_id_number,
+                                defaults={
+                                    'name': patient_name,
+                                    'phone_number': patient_phone_number,
+                                    'date_of_birth': patient_date_of_birth,
+                                    'ethnic_group': patient_ethnic_group,
+                                    'health_insurance': patient_health_insurance,
+                                    'address': patient_address,
+                                }
+                            )
+                        else:
+                            patient, created = patientdata.objects.get_or_create(
+                                name=patient_name,
+                                defaults={
+                                    'phone_number': patient_phone_number,
+                                    'date_of_birth': patient_date_of_birth,
+                                    'ethnic_group': patient_ethnic_group,
+                                    'health_insurance': patient_health_insurance,
+                                    'address': patient_address,
+                                }
+                            )
+
+                        # Handle hospital foreign key
+                        hospital_name = row.get('hospital_name')
+                        if hospital_name:
+                            hospital = get_object_or_404(Hospital, name=hospital_name)
+                        else:
+                            hospital = None
+
+                        # Handle doctor foreign key
+                        doctor_id = row.get('doctor_id')
+                        doctor_name = row.get('doctor_name')
+                        if doctor_id:
+                            doctor = get_object_or_404(Doctor, pk=doctor_id)
+                        elif doctor_name:
+                            doctor = get_object_or_404(Doctor, name=doctor_name)
+                        else:
+                            doctor = None
+
+                        # Handle diagnosis foreign key
+                        diagnosis_name = row.get('diagnosis')
+                        if diagnosis_name:
+                            diagnosis = get_object_or_404(Diagnosis, name=diagnosis_name)
+                        else:
+                            diagnosis = None
+
+                        # Create TreatmentRecord
+                        TreatmentRecord.objects.create(
+                            patient=patient,
+                            medical_record=row.get('medical_record', ''),
+                            date_of_treatment=row.get('date_of_treatment', None),
+                            hospital_name=hospital,
+                            service_unit=row.get('service_unit', ''),
+                            doctor_name=doctor,
+                            diagnosis=diagnosis,
+                            stadium=row.get('stadium', ''),
+                            grade=row.get('grade', ''),
+                            tumor=row.get('tumor', ''),
+                            nodes=row.get('nodes', ''),
+                            metastasis=row.get('metastasis', ''),
+                            bone_scan=row.get('bone_scan', ''),
+                            pet_scan=row.get('pet_scan', ''),
+                            psma_pet_ct=row.get('psma_pet_ct', ''),
+                            choline_pet_ct=row.get('choline_pet_ct', ''),
+                            fluoride_pet=row.get('fluoride_pet', ''),
+                            treatment=row.get('treatment', ''),
+                            incontinence=row.get('incontinence', False),
+                            pad_usage=row.get('pad_usage', ''),
+                            erectile_dysfunction=row.get('erectile_dysfunction', False),
+                            side_effects=row.get('side_effects', ''),
+                            subjective=row.get('subjective', ''),
+                            objective=row.get('objective', ''),
+                            assessment=row.get('assessment', ''),
+                            plan=row.get('plan', ''),
+                        )
+                    except Exception as e:
+                        messages.error(request, f"Error processing row {index + 1}: {e}")
+                        continue
+
+                messages.success(request, "Data imported successfully!")
+            except Exception as e:
+                messages.error(request, f"Error reading the Excel file: {e}")
+
+            return redirect("import_data")
+
+    else:
+        form = UploadFileForm()
+    return render(request, "medicalrecord/import_data.html", {"form": form})
+
+
+@login_required
+def export_data(request):
+    if request.method == "POST":
+        form = ExportDataForm(request.POST)
+        if form.is_valid():
+            export_all = form.cleaned_data['export_all']
+            hospital = form.cleaned_data['hospital'] if not export_all else None
+            doctor = form.cleaned_data['doctor'] if not export_all else None
+            diagnosis = form.cleaned_data['diagnosis'] if not export_all else None
+            treatment = form.cleaned_data['treatment'] if not export_all else ""
+
+            queryset = TreatmentRecord.objects.all()
+
+            if not export_all:
+                if hospital:
+                    queryset = queryset.filter(hospital_name=hospital)
+                if doctor:
+                    queryset = queryset.filter(doctor_name=doctor)
+                if diagnosis:
+                    queryset = queryset.filter(diagnosis=diagnosis)
+                if treatment:
+                    queryset = queryset.filter(treatment__icontains=treatment)
+
+            data = []
+            for record in queryset:
+                data.append({
+                    'patient_id_number': record.patient.id_number,
+                    'patient_name': record.patient.name,
+                    'patient_phone_number': record.patient.phone_number,
+                    'patient_date_of_birth': record.patient.date_of_birth,
+                    'patient_ethnic_group': record.patient.ethnic_group,
+                    'patient_health_insurance': record.patient.health_insurance,
+                    'patient_address': record.patient.address,
+                    'medical_record': record.medical_record,
+                    'date_of_treatment': record.date_of_treatment,
+                    'hospital_name': record.hospital_name.name if record.hospital_name else '',
+                    'service_unit': record.service_unit,
+                    'doctor_name': record.doctor_name.name if record.doctor_name else '',
+                    'diagnosis': record.diagnosis.name if record.diagnosis else '',
+                    'stadium': record.stadium,
+                    'grade': record.grade,
+                    'tumor': record.tumor,
+                    'nodes': record.nodes,
+                    'metastasis': record.metastasis,
+                    'bone_scan': record.bone_scan,
+                    'pet_scan': record.pet_scan,
+                    'psma_pet_ct': record.psma_pet_ct,
+                    'choline_pet_ct': record.choline_pet_ct,
+                    'fluoride_pet': record.fluoride_pet,
+                    'treatment': record.treatment,
+                    'incontinence': record.incontinence,
+                    'pad_usage': record.pad_usage,
+                    'erectile_dysfunction': record.erectile_dysfunction,
+                    'side_effects': record.side_effects,
+                    'subjective': record.subjective,
+                    'objective': record.objective,
+                    'assessment': record.assessment,
+                    'plan': record.plan,
+                })
+
+            df = pd.DataFrame(data)
+
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=treatment_records.xlsx'
+            df.to_excel(response, index=False)
+
+            return response
+    else:
+        form = ExportDataForm()
+
+    return render(request, "export_data.html", {"form": form})

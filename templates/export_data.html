@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Export Treatment Records
+{% endblock title %}
+
+{% block content %}
+    <div class="container mt-3 mb-5">
+        <h2 class="mb-4" style="border-bottom: 1px solid black; padding-bottom: 0.5em">Export Data</h2>
+        <form method="post" id="export-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Export</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const exportAllCheckbox = document.getElementById('id_export_all');
+            const form = document.getElementById('export-form');
+
+            function toggleFields() {
+                const isChecked = exportAllCheckbox.checked;
+                form.querySelectorAll('select, input[type="text"]').forEach(field => {
+                    if (field !== exportAllCheckbox) {
+                        field.disabled = isChecked;
+                        if (isChecked) {
+                            field.value = '';
+                        }
+                    }
+                });
+            }
+
+            exportAllCheckbox.addEventListener('change', toggleFields);
+            toggleFields();
+        });
+    </script>
+{% endblock %}
