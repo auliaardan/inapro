@@ -75,6 +75,10 @@ TEMPLATES = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = ['axes.backends.AxesStandaloneBackend',
+                           'django.contrib.auth.backends.ModelBackend',
+                           ]
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
