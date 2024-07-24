@@ -108,7 +108,20 @@ class PatientCreateView(LoginRequiredMixin, CreateView):
 class PatientListView(LoginRequiredMixin, ListView):
     model = patientdata
     template_name = 'medicalrecord/patient_list.html'
-    context_object_name = 'patient_list'
+    context_object_name = 'patients'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        patients = context['patients']
+        patient_last_treatments = []
+        for patient in patients:
+            last_treatment = TreatmentRecord.objects.get_last_treatment(patient)
+            patient_last_treatments.append({
+                'patient': patient,
+                'last_treatment': last_treatment
+            })
+        context['patient_last_treatments'] = patient_last_treatments
+        return context
 
 
 class PatientUpdateView(LoginRequiredMixin, UpdateView):

@@ -23,18 +23,24 @@
                     <th scope="col" data-orderable="true">ID Number</th>
                     <th scope="col" data-orderable="true">Name</th>
                     <th scope="col" data-orderable="true">Date of Birth</th>
-                    <th scope="col" data-orderable="false"> </th>
+                    <th scope="col" data-orderable="true">Diagnosis</th>
+                    <th scope="col" data-orderable="false"></th>
                 </tr>
                 </thead>
                 <tbody id="table-body">
-                {% for patient in patient_list %}
+                {% for patient_data in patient_last_treatments %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ patient.id_number }}</td>
-                        <td>{{ patient.name }}</td>
-                        <td>{{ patient.date_of_birth }}</td>
-                        <td><a href="{% url 'patient_edit' patient.id %}">Edit</a> / <a
-                                href="{% url 'patient_delete' patient.id %}">Delete</a></td>
+                        <td>{{ patient_data.patient.id_number }}</td>
+                        <td>{{ patient_data.patient.name }}</td>
+                        <td>{{ patient_data.patient.date_of_birth }}</td>
+                        {% if patient_data.last_treatment.diagnosis %}
+                            <td>{{ patient_data.last_treatment.diagnosis }}</td>
+                        {% else %}
+                            <td>No Data</td>
+                        {% endif %}
+                        <td><a href="{% url 'patient_edit' patient_data.patient.id %}">Edit</a> / <a
+                                href="{% url 'patient_delete' patient_data.patient.id %}">Delete</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
