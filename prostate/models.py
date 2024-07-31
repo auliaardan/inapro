@@ -1,5 +1,9 @@
+import os
+from io import BytesIO
+
+from PIL import Image
+from django.core.files.base import ContentFile
 from django.db import models
-from django.db.models import Max
 
 
 # Register your models here.
@@ -36,6 +40,7 @@ class Doctor(models.Model):
 class Diagnosis(models.Model):
     name = models.CharField(max_length=100)
     icd_code = models.CharField(max_length=100)
+
     def __str__(self):
         return self.name
 
@@ -55,11 +60,14 @@ class TreatmentRecord(models.Model):
     service_unit = models.CharField(max_length=100, verbose_name="Service Unit", help_text="Unit Layanan")
     doctor_name = models.ForeignKey(Doctor, on_delete=models.CASCADE, blank=False)
     diagnosis = models.ForeignKey(Diagnosis, on_delete=models.CASCADE)
-    stadium = models.CharField(max_length=50, verbose_name="Stadium", help_text="Isi dengan TxNxMx", blank=True, null=True)
-    grade = models.CharField(max_length=50, verbose_name="Grade", help_text="Isi Gleason Score atau Grading penyakit tsb", blank=True, null=True)
+    stadium = models.CharField(max_length=50, verbose_name="Stadium", help_text="Isi dengan TxNxMx", blank=True,
+                               null=True)
+    grade = models.CharField(max_length=50, verbose_name="Grade",
+                             help_text="Isi Gleason Score atau Grading penyakit tsb", blank=True, null=True)
     tumor = models.CharField(max_length=50, verbose_name="Tumor (T)", help_text="Isi dengan Tx", blank=True, null=True)
     nodes = models.CharField(max_length=50, verbose_name="Nodes (N)", help_text="Isi dengan Nx", blank=True, null=True)
-    metastasis = models.CharField(max_length=50, verbose_name="Metastasis (M)", help_text="Isi dengan Mx", blank=True, null=True)
+    metastasis = models.CharField(max_length=50, verbose_name="Metastasis (M)", help_text="Isi dengan Mx", blank=True,
+                                  null=True)
     bone_scan = models.TextField(max_length=100, verbose_name="Bone Scan", help_text="", blank=True)
     pet_scan = models.TextField(max_length=100, verbose_name="Pet Scan", help_text="", blank=True)
     psma_pet_ct = models.TextField(max_length=100, verbose_name="PSMA PET/CT", help_text="", blank=True)
@@ -86,3 +94,27 @@ class TreatmentRecord(models.Model):
 
     def __str__(self):
         return f"Treatment Record for {self.patient.name} on {self.date_of_treatment}"
+
+    def save(self, *args, **kwargs):
+        if self.foto_lab:
+            self.foto_lab = self.compress_image(self.foto_lab)
+        if self.foto_radiologi:
+            self.foto_radiologi = self.compress_image(self.foto_radiologi)
+        if self.foto_laporan_operasi:
+            self.foto_laporan_operasi = self.compress_image(self.foto_laporan_operasi)
+        super().save(*args, **kwargs)
+
+    def compress_image(self, image):
+        im = Image.open(image)
+        im_io = BytesIO()
+        im = im.convert('RGB')
+        im.save(im_io, 'JPEG', quality=85)
+        new_image = ContentFile(im_io.getvalue(), name=image.name)
+        return new_image
+
+    def delete(self, *args, **kwargs):
+        fotos = [self.foto_lab, self.foto_radiologi, self.foto_laporan_operasi]
+        super().delete(*args, **kwargs)
+        for foto in fotos:
+            if foto and os.path.isfile(foto.path):
+                os.remove(foto.path)
